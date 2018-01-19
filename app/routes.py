@@ -1,37 +1,23 @@
 from flask import render_template, flash, redirect, url_for
-from app import app
-from app.forms import LoginForm, RegistrationForm
+from app import app, db
+from app.forms import LoginForm, RegistrationForm, BlogForm
 from app.models import User
 from flask_login import current_user, login_user, logout_user, login_required
 
 
 @app.route('/')
-@app.route('/index')
-@login_required
+@app.route('/index', methods=['GET', 'POST'])
+#@login_required
 def index():
-    user = {'username': 'erix'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
-
-'''
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
-        return redirect(url_for('index'))
-    return render_template('login.html', title='sign in',form=form)
-'''
+    if current_user.is_authenticated:
+        user=current_user.username
+    else:
+        user='Stranger'
+    #form=BlogForm()
+    #if form.validate_on_submit():
+    #    post=Post(body=form.body.data, author=current_user)
+    return render_template('index.html', title='Home',user=user)
+    #return render_template('index.html', title='Home', user=current_user, posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,3 +51,14 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/admin', methods=['GET','POST'])
+def admin():
+    #if current_user.is_anonymous:
+    #    return redirect(url_for('index'))
+    form = BlogForm()
+    if form.validate_on_submit():
+        post = Post(body=form.text.data, author=current_user)
+        db.session.save(post)
+        db.session.commit()
+    return render_template('adminui.html',form=form)
