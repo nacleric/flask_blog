@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
@@ -27,5 +27,5 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 
 class BlogForm(FlaskForm):
-    text = TextField('Blogpost', validators=[DataRequired()])
+    text = TextAreaField('Blogpost')
     submit = SubmitField('submit')

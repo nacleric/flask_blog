@@ -1,5 +1,27 @@
-<h1> admin window <h1>
-  <form action="" method="post">
-    {{ form.text.label }}<br>
-    {{ form.text(size=400) }}<br>
-  </form>
+<head>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<body>
+  <div class="container center">
+    <a href="{{ url_for('index') }}">Home</a>
+  </div>
+  <hr>
+  <div class="container">
+  <h1> ADMIN UI <h1>
+    <div class="input-field" style="font-size:12px;">
+      <form action="" method="post">
+        {{ form.csrf_token }}
+        {{ form.text.label }}<br>
+        {{ form.text}}
+        {% for error in form.text.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p>{{ form.submit() }}</p>
+
+      </form>
+    </div>
+  </div>
+</body>

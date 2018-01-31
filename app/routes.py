@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, BlogForm
-from app.models import User
+from app.models import User, Post
 from flask_login import current_user, login_user, logout_user, login_required
 
 
@@ -13,10 +13,11 @@ def index():
         user=current_user.username
     else:
         user='Stranger'
+    posts=Post.query.all()
     #form=BlogForm()
     #if form.validate_on_submit():
     #    post=Post(body=form.body.data, author=current_user)
-    return render_template('index.html', title='Home',user=user)
+    return render_template('index.html', title='Home',user=user,posts=posts)
     #return render_template('index.html', title='Home', user=current_user, posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,11 +55,13 @@ def register():
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
-    #if current_user.is_anonymous:
-    #    return redirect(url_for('index'))
+    if current_user.is_anonymous:
+        return redirect(url_for('index'))
     form = BlogForm()
     if form.validate_on_submit():
         post = Post(body=form.text.data, author=current_user)
-        db.session.save(post)
+        db.session.add(post)
         db.session.commit()
+        return redirect(url_for('index'))
+        #return 'form has been submitted'
     return render_template('adminui.html',form=form)
