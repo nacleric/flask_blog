@@ -21,12 +21,14 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    title = db.Column(db.String)
+    intro = db.Column(db.String)
+    body = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+      return '<Title:{},Post:{} >'.format(self.title,self.body)
 
 @login.user_loader
 def load_user(id):

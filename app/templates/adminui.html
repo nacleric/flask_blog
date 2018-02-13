@@ -1,8 +1,5 @@
 <head>
-  <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <!-- Compiled and minified -->
 </head>
 <body>
   <div class="container center">
@@ -14,14 +11,19 @@
     <div class="input-field" style="font-size:12px;">
       <form action="" method="post">
         {{ form.csrf_token }}
+        {{ form.title.label }}
+        {{ form.title }}
+        {{ form.intro.label }}
+        {{ form.intro }}
         {{ form.text.label }}<br>
         {{ form.text}}
         {% for error in form.text.errors %}
           <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
         <p>{{ form.submit() }}</p>
-
+        
       </form>
     </div>
   </div>
+ 
 </body>
